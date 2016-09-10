@@ -1,26 +1,19 @@
 /**
- * QAInterface defines the interface for a question/answer class of the form select one answer from a list of
- * possibilities.
+ * Defines the interface for a question/answer class of the form memorize and match a sequence.
  */
 public interface QAInterface<T> {
     /**
-     * Returns an array containing the possible answers.
-     * @return An array containing the possible answers.
-     */
-    public T[] getOptions();
-
-    /**
-     * Generates a random question sequence.
+     * Generates a random sequence.
      * @param n Desired sequence length.
      */
     public void generate(int n);
 
     /**
-     * Validates an answer against the correct one.
-     * @param idx The index of the user's answer.
+     * Validates an answer sequence against the correct sequence.
+     * @param answer The proposed answer sequence.
      * @return True if the answer is correct, false otherwise.
      */
-    public boolean validate(int idx);
+    public boolean validate(T[] answer);
 
     /**
      * Generates the human-readable question.
