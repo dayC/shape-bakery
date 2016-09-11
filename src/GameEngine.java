@@ -2,13 +2,14 @@ import javax.swing.*;
 
 public class GameEngine extends JApplet {
     UI userInterface;
+    Shape[] shapes = new Shape[]{Shape.CIRCLE, Shape.PENTAGON, Shape.RHOMBUS, Shape.TRAPEZOID};
 
     public void init() {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
                     createGUI();
-                    userInterface.startRound();
+                    userInterface.startRound(shapes);
                 }
             });
         } catch (Exception e) {
@@ -17,7 +18,6 @@ public class GameEngine extends JApplet {
     }
 
     private void createGUI() {
-        //Create and set up the content pane.
         userInterface = new UI();
         userInterface.setOpaque(true);
         setContentPane(userInterface);

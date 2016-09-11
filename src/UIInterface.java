@@ -14,4 +14,11 @@ public interface UIInterface {
      * @param order An array of shapes that is already sorted in the correct memorization order.
      */
     void startRound(Shape[] order);
+
+    /**
+     * Helper method to shuffle an array of Shape objects. Temporarily stored here until Game Engine or QA
+     * can implement.
+     * @param order An array of shapes that is already sorted in the correct memorization order.
+     */
+    void shuffle(Shape[] order);
 }
