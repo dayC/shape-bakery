@@ -6,12 +6,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ShapeQA implements QAInterface<Shape> {
     private Shape[] sequence; /**< The sequence last generated. */
 
-    public void generate(int n) {
+    public Shape[] generate(int n) {
         sequence = new Shape[n];
 
         for (int i = 0; i < n; i++) {
             sequence[i] = Shape.values()[ThreadLocalRandom.current().nextInt(1, Shape.values().length)];
         }
+
+        return sequence;
     }
 
     public boolean validate(Shape[] answer) {
