@@ -10,16 +10,18 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class UI extends JPanel implements ActionListener, UIInterface {
     private GameEngine engine;
-    private JLabel score, instructions;
+    private JLabel score, instructions, title;
     private JButton[] options;
     private ImageIcon[] images;
 
     public UI(GameEngine engine) {
         super(new BorderLayout());
         this.engine = engine;
-        JLabel title = new JLabel("Shape Factory");
-        updateScore(0);
-        updateInstructions("Welcome to Shape Factory!");
+        options = new JButton[4];
+        images = new ImageIcon[4];
+        instructions = new JLabel("Welcome to Shape Factory!");
+        title = new JLabel("Shape Factory");
+        score = new JLabel("Score: 0");
 
         JPanel titlePanel = new JPanel(new GridLayout(0,1));
         titlePanel.add(title);
@@ -35,29 +37,25 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         JPanel selectionPanel = new JPanel(new GridLayout(0,4));
         shuffle(order);
 
-        int delay = 8000;
-        Timer swingTimer = new Timer(delay, new ActionListener() {
+        int delay = 6000;
+        ActionListener pause = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // pause for delay * 1000 number of seconds
+                updateInstructions("Watch the order that the shapes are highlighted carefully and try to remember it!");
+
+                for (int i = 0; i < order.length; i++) {
+                    images[i] = new ImageIcon(getClass().getResource(order[i].getImage()));
+                    options[i] = new JButton(images[i]);
+                    options[i].setName(order[i].getReadable());
+                    options[i].addActionListener(this);
+                    selectionPanel.add(options[i]);
+                }
+
+                add(selectionPanel, BorderLayout.CENTER);
             }
-        });
+        };
+        new Timer(delay, pause).start();
 
-        swingTimer.start();
-
-        updateInstructions("Watch the order that the shapes are highlighted carefully and try to remember it!");
-
-        options = new JButton[4];
-        images = new ImageIcon[4];
-
-        for (int i = 0; i < order.length; i++) {
-            images[i] = new ImageIcon(getClass().getResource(order[i].getImage()));
-            options[i] = new JButton(images[i]);
-            options[i].setName(order[i].getReadable());
-            options[i].addActionListener(this);
-            selectionPanel.add(options[i]);
-        }
-
-        add(selectionPanel, BorderLayout.CENTER);
+        
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -84,10 +82,10 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     }
 
     public void updateScore(int score) {
-        this.score = new JLabel("Score: " + score);
+        this.score.setText("Score: " + score);
     }
 
     public void updateInstructions(String message) {
-        this.instructions = new JLabel("Message: " + message);
+        this.instructions.setText("Message: " + message);
     }
 }

@@ -28,9 +28,5 @@ public class GameEngine extends JApplet {
 
     public void addShape(String shape) {
         shapes2.add(shape);
-        if (shapes2.size() == 4) {
-            System.out.println("Pressed 4");
-            System.out.println(shapes2.get(3));
-        }
     }
 }
