@@ -13,7 +13,7 @@ public interface QAInterface<T> {
      * @param answer The proposed answer sequence.
      * @return True if the answer is correct, false otherwise.
      */
-    public boolean validate(T[] answer);
+    public boolean validate(String[] answer);
 
     /**
      * Generates the human-readable question.
