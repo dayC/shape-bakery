@@ -8,6 +8,7 @@ public class GameEngine extends JApplet {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
+                    resize(1024, 250);
                     createGUI();
                     userInterface.startRound(shapes);
                 }

@@ -10,6 +10,12 @@ public interface UIInterface {
      void updateScore(int score);
 
     /**
+     * Updates the informational message in the graphical interface.
+     * @param message The message to be displayed.
+     */
+    void updateInstructions(String message);
+
+    /**
      * Starts a new round, receiving an array of shapes to display to the user in order to be memorized.
      * @param order An array of shapes that is already sorted in the correct memorization order.
      */

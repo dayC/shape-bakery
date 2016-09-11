@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Defines the interface for a user interface class that displays visual elements and listens to user input.
  */
 public class UI extends JPanel implements ActionListener, UIInterface {
-    private JLabel score;
+    private JLabel score, instructions;
     private JButton[] options;
     private ImageIcon[] images;
 
@@ -17,13 +17,15 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         super(new BorderLayout());
         JLabel title = new JLabel("Shape Factory");
         updateScore(0);
+        updateInstructions("Welcome to Shape Factory!");
 
         JPanel titlePanel = new JPanel(new GridLayout(0,1));
         titlePanel.add(title);
         add(titlePanel, BorderLayout.NORTH);
 
-        JPanel scorePanel = new JPanel(new GridLayout(0,1));
+        JPanel scorePanel = new JPanel(new GridLayout(0,2));
         scorePanel.add(score);
+        scorePanel.add(instructions);
         add(scorePanel, BorderLayout.SOUTH);
     }
 
@@ -31,9 +33,10 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         JPanel selectionPanel = new JPanel(new GridLayout(0,4));
         shuffle(order);
         options = new JButton[4];
+        images = new ImageIcon[4];
 
         for (int i = 0; i < order.length; i++) {
-            images[i] = new ImageIcon(order[i].getImage());
+            images[i] = new ImageIcon(getClass().getResource(order[i].getImage()));
             options[i] = new JButton(images[i]);
             selectionPanel.add(options[i]);
         }
@@ -58,5 +61,9 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
     public void updateScore(int score) {
         this.score = new JLabel("Score: " + score);
+    }
+
+    public void updateInstructions(String message) {
+        this.instructions = new JLabel("Message: " + message);
     }
 }
