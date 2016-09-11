@@ -36,7 +36,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         JPanel selectionPanel = new JPanel(new GridLayout(0,4));
 
         for (int i = 0; i < order.length; i++) {
-            
+
         }
 
         option1 = new JButton(squareCake);
