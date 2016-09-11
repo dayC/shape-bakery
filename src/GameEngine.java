@@ -1,8 +1,10 @@
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class GameEngine extends JApplet {
     UI userInterface;
     Shape[] shapes = new Shape[]{Shape.CIRCLE, Shape.PENTAGON, Shape.RHOMBUS, Shape.TRAPEZOID};
+    ArrayList<String> shapes2 = new ArrayList<String>();
 
     public void init() {
         try {
@@ -19,8 +21,16 @@ public class GameEngine extends JApplet {
     }
 
     private void createGUI() {
-        userInterface = new UI();
+        userInterface = new UI(this);
         userInterface.setOpaque(true);
         setContentPane(userInterface);
+    }
+
+    public void addShape(String shape) {
+        shapes2.add(shape);
+        if (shapes2.size() == 4) {
+            System.out.println("Pressed 4");
+            System.out.println(shapes2.get(3));
+        }
     }
 }
