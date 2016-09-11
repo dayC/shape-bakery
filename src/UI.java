@@ -7,7 +7,7 @@ import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class UI extends JApplet implements UIInterface, ActionListener{
+public class UI extends JApplet implements ActionListener{
     private JLabel title, score;
     private ImageIcon squareCake, circleCake, triangleCake, rhombusCake, trapezoidCake, pentagonCake;
     private JButton option1, option2, option3, option4;
@@ -72,5 +72,9 @@ public class UI extends JApplet implements UIInterface, ActionListener{
         add(option2);
         add(option3);
         add(option4);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        // silence warning with implements
     }
 }
