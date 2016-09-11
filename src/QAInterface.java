@@ -6,7 +6,7 @@ public interface QAInterface<T> {
      * Generates a random sequence.
      * @param n Desired sequence length.
      */
-    public void generate(int n);
+    public T[] generate(int n);
 
     /**
      * Validates an answer sequence against the correct sequence.
