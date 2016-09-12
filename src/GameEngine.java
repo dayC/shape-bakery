@@ -1,12 +1,7 @@
-/**
- * Created by phillip.porter234 on 9/7/16.
- */
-
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class GameEngine extends JApplet
-{
+public class GameEngine extends JApplet {
     UI userInterface;
     Shape[] shapes = new Shape[]{Shape.CIRCLE, Shape.PENTAGON, Shape.RHOMBUS, Shape.TRAPEZOID};
     ArrayList<String> shapes2 = new ArrayList<String>();
@@ -19,11 +14,11 @@ public class GameEngine extends JApplet
     // Turns remaining
     private int turnsRemaining = this.gameDuration;
 
+
     // CAKE_SEQUENCE_LENGTH is 4 by default
     private int cakeSequenceLength = 4;
     private final int MIN_CAKE_SEQUENCE_LENGTH = 1;
     private final int MAX_CAKE_SEQUENCE_LENGTH = 8;
-
 
     public int getGameDuration()
     {
@@ -96,9 +91,3 @@ public class GameEngine extends JApplet
     }
     
 }
-
-
-
-
-
-
