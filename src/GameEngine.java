@@ -15,7 +15,7 @@ public class GameEngine extends JApplet {
     private int cakeSequenceLength = 4;
     private final int MIN_CAKE_SEQUENCE_LENGTH = 1;
     private final int MAX_CAKE_SEQUENCE_LENGTH = 8;
-
+    
     private boolean setDuration(int turns)
     {
         if (turns >= MIN_GAME_DURATION && turns <= MAX_GAME_DURATION)
