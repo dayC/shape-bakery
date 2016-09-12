@@ -46,7 +46,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
         int delay = 6000;
 
-        ActionListener pause = new ActionListener() {
+        Timer timer = new Timer(delay, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 updateInstructions("Watch the order that the shapes are highlighted carefully and try to remember it!");
 
@@ -61,19 +61,18 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
                 add(selectionPanel, BorderLayout.CENTER);
             }
-        };
-        Timer timer = new Timer(delay, pause);
+        });
         timer.setRepeats(false);
         timer.start();
 
-        // delay between showing memorization order of shapes
+ /*       // delay between showing memorization order of shapes
         delay = 2000;
 
-        index = 0;
+        index = 0;*/
 
-        options[index].setBackground(Color.RED);
+        options[0].setBackground(Color.RED);
 
-        ActionListener memorize = new ActionListener() {
+  /*      ActionListener memorize = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 options[index].setBackground(null);
             }
@@ -84,7 +83,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         timer2.start();
 
         System.out.println(options[index].getName());
-        System.out.println(order[index].getReadable());
+        System.out.println(order[index].getReadable());*/
     }
 
     public void actionPerformed(ActionEvent e) {
