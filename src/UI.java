@@ -5,16 +5,19 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+
 /**
  * Defines the interface for a user interface class that displays visual elements and listens to user input.
  */
 public class UI extends JPanel implements ActionListener, UIInterface {
     private GameEngine engine;
-    private JLabel score, instructions, title;
+    private JLabel score, instructions, title, round;
     private JButton[] options;
+    private Shape[] order;
     private ImageIcon[] images;
 
     private int index;
+    private Timer memTimer;
 
     public UI(GameEngine engine) {
         super(new BorderLayout());
@@ -24,6 +27,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         instructions = new JLabel("Welcome to Shape Factory!");
         title = new JLabel("Shape Factory");
         score = new JLabel("Score: 0");
+        round = new JLabel("Round: 1");
 
         JPanel titlePanel = new JPanel(new GridLayout(0,1));
         titlePanel.add(title);
@@ -38,52 +42,64 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     public void startRound(Shape[] order) {
         JPanel selectionPanel = new JPanel(new GridLayout(0,4));
         Shape[] shuffled = new Shape[order.length];
+        this.order = order;
 
         for (int i = 0; i < order.length; i++) {
             shuffled[i] = order[i];
         }
+
         shuffle(shuffled);
+
+        for (int i = 0; i < shuffled.length; i++) {
+            images[i] = new ImageIcon(getClass().getResource(shuffled[i].getImage()));
+            options[i] = new JButton(images[i]);
+            options[i].setOpaque(true);
+            options[i].setName(shuffled[i].getReadable());
+            options[i].addActionListener(this);
+        }
 
         int delay = 6000;
 
-        Timer timer = new Timer(delay, new ActionListener() {
+        ActionListener pauseDisplay = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                updateInstructions("Watch the order that the shapes are highlighted carefully and try to remember it!");
+                updateInstructions("Memorize the order the shapes are highlighted!");
 
-                for (int i = 0; i < shuffled.length; i++) {
-                    images[i] = new ImageIcon(getClass().getResource(shuffled[i].getImage()));
-                    options[i] = new JButton(images[i]);
-                    options[i].setOpaque(true);
-                    options[i].setName(shuffled[i].getReadable());
-                    options[i].addActionListener(this);
+                for (int i = 0; i < options.length; i++) {
                     selectionPanel.add(options[i]);
                 }
 
                 add(selectionPanel, BorderLayout.CENTER);
             }
-        });
+        };
+        Timer timer = new Timer(delay, pauseDisplay);
         timer.setRepeats(false);
         timer.start();
 
- /*       // delay between showing memorization order of shapes
-        delay = 2000;
 
-        index = 0;*/
+        // delay between showing memorization order of shapes
+        delay = 3000;
 
-        options[0].setBackground(Color.RED);
+        index = 0;
 
-  /*      ActionListener memorize = new ActionListener() {
+        ActionListener pauseMemorize = new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent e) {
-                options[index].setBackground(null);
+                if (index == 4) {
+                    timer.stop();
+                }
+                if (index > 0) {
+                    getButton(order[index - 1].getReadable()).setBackground(null);
+                }
+                getButton(order[index++].getReadable()).setBackground(Color.RED);
             }
         };
 
-        Timer timer2 = new Timer(delay, memorize);
-        timer2.setRepeats(false);
-        timer2.start();
+        memTimer = new Timer(delay, pauseMemorize);
+        memTimer.setRepeats(true);
+        memTimer.setInitialDelay(2 * delay);
+        memTimer.start();
 
-        System.out.println(options[index].getName());
-        System.out.println(order[index].getReadable());*/
+        options[index].setBackground(null);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -109,8 +125,21 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         }
     }
 
+    public JButton getButton(String buttonName) {
+        for (int i = 0; i < options.length; i++) {
+            if (options[i].getName().equals(buttonName)) {
+                return options[i];
+            }
+        }
+        return null;
+    }
+
     public void updateScore(int score) {
         this.score.setText("Score: " + score);
+    }
+
+    public void updateRound(int round) {
+        this.round.setText("Round: " + round);
     }
 
     public void updateInstructions(String message) {

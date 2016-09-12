@@ -10,6 +10,12 @@ public interface UIInterface {
      void updateScore(int score);
 
     /**
+     * Updates the round in the graphical interface.
+     * @param round The round to be updated.
+     */
+    void updateRound(int round);
+
+    /**
      * Updates the informational message in the graphical interface.
      * @param message The message to be displayed.
      */
