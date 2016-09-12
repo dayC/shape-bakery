@@ -43,4 +43,8 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+# Mac stuff
 .DS_Store
+
+# Doxygen
+doc/
