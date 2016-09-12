@@ -14,6 +14,8 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     private JButton[] options;
     private ImageIcon[] images;
 
+    private int index;
+
     public UI(GameEngine engine) {
         super(new BorderLayout());
         this.engine = engine;
@@ -35,27 +37,53 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
     public void startRound(Shape[] order) {
         JPanel selectionPanel = new JPanel(new GridLayout(0,4));
-        shuffle(order);
+        Shape[] shuffled = new Shape[order.length];
+
+        for (int i = 0; i < order.length; i++) {
+            shuffled[i] = order[i];
+        }
+        shuffle(shuffled);
 
         int delay = 6000;
-        ActionListener pause = new ActionListener() {
+
+        Timer timer = new Timer(delay, new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 updateInstructions("Watch the order that the shapes are highlighted carefully and try to remember it!");
 
-                for (int i = 0; i < order.length; i++) {
-                    images[i] = new ImageIcon(getClass().getResource(order[i].getImage()));
+                for (int i = 0; i < shuffled.length; i++) {
+                    images[i] = new ImageIcon(getClass().getResource(shuffled[i].getImage()));
                     options[i] = new JButton(images[i]);
-                    options[i].setName(order[i].getReadable());
+                    options[i].setOpaque(true);
+                    options[i].setName(shuffled[i].getReadable());
                     options[i].addActionListener(this);
                     selectionPanel.add(options[i]);
                 }
 
                 add(selectionPanel, BorderLayout.CENTER);
             }
-        };
-        new Timer(delay, pause).start();
+        });
+        timer.setRepeats(false);
+        timer.start();
 
-        
+ /*       // delay between showing memorization order of shapes
+        delay = 2000;
+
+        index = 0;*/
+
+        options[0].setBackground(Color.RED);
+
+  /*      ActionListener memorize = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                options[index].setBackground(null);
+            }
+        };
+
+        Timer timer2 = new Timer(delay, memorize);
+        timer2.setRepeats(false);
+        timer2.start();
+
+        System.out.println(options[index].getName());
+        System.out.println(order[index].getReadable());*/
     }
 
     public void actionPerformed(ActionEvent e) {
