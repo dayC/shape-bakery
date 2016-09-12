@@ -2,21 +2,48 @@
  * Created by phillip.porter234 on 9/7/16.
  */
 
-import java.util.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class GameEngine extends JApplet
 {
+    UI userInterface;
+    Shape[] shapes = new Shape[]{Shape.CIRCLE, Shape.PENTAGON, Shape.RHOMBUS, Shape.TRAPEZOID};
+    ArrayList<String> shapes2 = new ArrayList<String>();
+
     // GAME_DURATION is 20 by default
-    int gameDuration = 20;
-    final int MIN_GAME_DURATION = 1;
-    final int MAX_GAME_DURATION = 40;
+    private int gameDuration = 20;
+    private final int MIN_GAME_DURATION = 1;
+    private final int MAX_GAME_DURATION = 40;
+
+    // Turns remaining
+    private int turnsRemaining = this.gameDuration;
 
     // CAKE_SEQUENCE_LENGTH is 4 by default
-    int cakeSequenceLength = 4;
-    final int MIN_CAKE_SEQUENCE_LENGTH = 1;
-    final int MAX_CAKE_SEQUENCE_LENGTH = 8;
+    private int cakeSequenceLength = 4;
+    private final int MIN_CAKE_SEQUENCE_LENGTH = 1;
+    private final int MAX_CAKE_SEQUENCE_LENGTH = 8;
 
+
+    public int getGameDuration()
+    {
+        return this.gameDuration;
+    }
+
+    public int getTurnsRemaining()
+    {
+        return this.turnsRemaining;
+    }
+
+    public int getCakeSequenceLength()
+    {
+        return cakeSequenceLength;
+    }
+
+    public int nextTurn()
+    {
+        return --this.turnsRemaining;
+    }
 
     private boolean setDuration(int turns)
     {
@@ -44,14 +71,30 @@ public class GameEngine extends JApplet
         }
     }
 
-    public static void main(String [] args)
-    {
-
-
-
-
-
+    public void init() {
+        try {
+            SwingUtilities.invokeAndWait(new Runnable() {
+                public void run() {
+                    resize(1024, 250);
+                    createGUI();
+                    userInterface.startRound(shapes);
+                }
+            });
+        } catch (Exception e) {
+            System.err.println("createGUI didn't complete successfully");
+        }
     }
+
+    private void createGUI() {
+        userInterface = new UI(this);
+        userInterface.setOpaque(true);
+        setContentPane(userInterface);
+    }
+
+    public void addShape(String shape) {
+        shapes2.add(shape);
+    }
+    
 }
 
 
