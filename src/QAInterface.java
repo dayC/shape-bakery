@@ -6,14 +6,14 @@ public interface QAInterface<T> {
      * Generates a random sequence.
      * @param n Desired sequence length.
      */
-    public void generate(int n);
+    public T[] generate(int n);
 
     /**
      * Validates an answer sequence against the correct sequence.
      * @param answer The proposed answer sequence.
      * @return True if the answer is correct, false otherwise.
      */
-    public boolean validate(T[] answer);
+    public boolean validate(String[] answer);
 
     /**
      * Generates the human-readable question.

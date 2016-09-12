@@ -11,11 +11,35 @@ public class GameEngine extends JApplet {
     private final int MIN_GAME_DURATION = 1;
     private final int MAX_GAME_DURATION = 40;
 
+    // Turns remaining
+    private int turnsRemaining = this.gameDuration;
+
+
     // CAKE_SEQUENCE_LENGTH is 4 by default
     private int cakeSequenceLength = 4;
     private final int MIN_CAKE_SEQUENCE_LENGTH = 1;
     private final int MAX_CAKE_SEQUENCE_LENGTH = 8;
-    
+
+    public int getGameDuration()
+    {
+        return this.gameDuration;
+    }
+
+    public int getTurnsRemaining()
+    {
+        return this.turnsRemaining;
+    }
+
+    public int getCakeSequenceLength()
+    {
+        return cakeSequenceLength;
+    }
+
+    public int nextTurn()
+    {
+        return --this.turnsRemaining;
+    }
+
     private boolean setDuration(int turns)
     {
         if (turns >= MIN_GAME_DURATION && turns <= MAX_GAME_DURATION)
@@ -65,4 +89,5 @@ public class GameEngine extends JApplet {
     public void addShape(String shape) {
         shapes2.add(shape);
     }
+    
 }

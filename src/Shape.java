@@ -27,7 +27,6 @@ public enum Shape {
     public String getReadable() {
         return readable;
     }
-
     public String getImage() {
         return image;
     }
