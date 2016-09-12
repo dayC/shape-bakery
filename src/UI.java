@@ -84,13 +84,15 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         ActionListener pauseMemorize = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (index == 4) {
+                if (index > 4) {
                     timer.stop();
-                }
-                if (index > 0) {
+                } else if (index > 0) {
                     getButton(order[index - 1].getReadable()).setBackground(null);
                 }
-                getButton(order[index++].getReadable()).setBackground(Color.RED);
+                if (index < 4) {
+                    getButton(order[index++].getReadable()).setBackground(Color.RED);
+                }
+
             }
         };
 
