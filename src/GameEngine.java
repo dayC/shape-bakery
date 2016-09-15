@@ -66,13 +66,26 @@ public class GameEngine extends JApplet {
         }
     }
 
+
+    public boolean checkforCorrectnessSoFar(Shape[] correctOrder) {
+        int i = 0;
+        while (i < correctOrder.length && i < this.shapes2.size()) {
+            if (!correctOrder[i].getReadable().equals(this.shapes2.get(i))) {
+                userInterface.updateInstructions("Incorrect!");
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+
     public void init() {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
                     resize(1024, 250);
                     createGUI();
-                    userInterface.startRound(shapes);
+                    userInterface.startGame(shapes);
                 }
             });
         } catch (Exception e) {
@@ -86,8 +99,17 @@ public class GameEngine extends JApplet {
         setContentPane(userInterface);
     }
 
+    public void clearGuesses() {
+        this.shapes2.clear();
+    }
+
     public void addShape(String shape) {
+
         shapes2.add(shape);
+        for (String s : shapes2) {
+            System.out.print(s + ", ");
+        }
+        System.out.println();
     }
     
 }

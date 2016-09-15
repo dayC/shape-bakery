@@ -12,12 +12,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class UI extends JPanel implements ActionListener, UIInterface {
     private GameEngine engine;
     private JLabel score, instructions, title, round;
+    JPanel selectionPanel;
     private JButton[] options;
     private Shape[] order;
     private ImageIcon[] images;
 
     private int index;
     private Timer memTimer;
+    private int currentScore;
 
     public UI(GameEngine engine) {
         super(new BorderLayout());
@@ -26,7 +28,8 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         images = new ImageIcon[4];
         instructions = new JLabel("Welcome to Shape Factory!");
         title = new JLabel("Shape Factory");
-        score = new JLabel("Score: 0");
+        this.currentScore = 0;
+        score = new JLabel("Score: " + this.currentScore);
         round = new JLabel("Round: 1");
 
         JPanel titlePanel = new JPanel(new GridLayout(0,1));
@@ -37,18 +40,16 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         scorePanel.add(score);
         scorePanel.add(instructions);
         add(scorePanel, BorderLayout.SOUTH);
+
     }
 
-    public void startRound(Shape[] order) {
-        JPanel selectionPanel = new JPanel(new GridLayout(0,4));
+    public void startGame(Shape[] order) {
+        this.selectionPanel = new JPanel(new GridLayout(0,4));
         Shape[] shuffled = new Shape[order.length];
         this.order = order;
+        System.arraycopy(order, 0, shuffled, 0, shuffled.length);
 
-        for (int i = 0; i < order.length; i++) {
-            shuffled[i] = order[i];
-        }
-
-        shuffle(shuffled);
+        shuffled = shuffle(shuffled);
 
         for (int i = 0; i < shuffled.length; i++) {
             images[i] = new ImageIcon(getClass().getResource(shuffled[i].getImage()));
@@ -57,9 +58,27 @@ public class UI extends JPanel implements ActionListener, UIInterface {
             options[i].setName(shuffled[i].getReadable());
             options[i].addActionListener(this);
         }
+        highlightShapes();
+    }
 
+    private void nextRound(Shape[] order) {
+        Shape[] shuffled = new Shape[order.length];
+        this.order = order;
+        System.arraycopy(order, 0, shuffled, 0, shuffled.length);
+
+        shuffled = shuffle(shuffled);
+
+        for (int i = 0; i < shuffled.length; i++) {
+            images[i] = new ImageIcon(getClass().getResource(shuffled[i].getImage()));
+            options[i].setIcon(images[i]);
+            options[i].setOpaque(true);
+            options[i].setName(shuffled[i].getReadable());
+        }
+        highlightShapes();
+    }
+
+    private void highlightShapes() {
         int delay = 6000;
-
         ActionListener pauseDisplay = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 updateInstructions("Memorize the order the shapes are highlighted!");
@@ -77,7 +96,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
 
         // delay between showing memorization order of shapes
-        delay = 3000;
+        delay = 2000;
 
         index = 0;
 
@@ -100,8 +119,6 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         memTimer.setRepeats(true);
         memTimer.setInitialDelay(2 * delay);
         memTimer.start();
-
-        options[index].setBackground(null);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -114,9 +131,21 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         } else if (e.getSource() == options[3]) {
             engine.addShape(options[3].getName());
         }
+
+        if (!engine.checkforCorrectnessSoFar(this.order)) {
+            decrementScore();
+            engine.clearGuesses();
+            nextRound(this.order);
+        }
+        else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.shapes2.size()) {
+            this.order = shuffle(this.order);
+            incrementScore();
+            engine.clearGuesses();
+            nextRound(this.order);
+        }
     }
 
-    public void shuffle(Shape[] order) {
+    public Shape[] shuffle(Shape[] order) {
         Random rand = ThreadLocalRandom.current();
         for (int i = order.length - 1; i > 0; i--) {
             int index = rand.nextInt(i + 1);
@@ -125,6 +154,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
             order[index] = order[i];
             order[i] = temp;
         }
+        return order;
     }
 
     public JButton getButton(String buttonName) {
@@ -136,8 +166,24 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         return null;
     }
 
-    public void updateScore(int score) {
-        this.score.setText("Score: " + score);
+    public void setScore(int score) {
+        this.currentScore = score;
+        updateScoreText();
+    }
+
+    public void incrementScore() {
+        this.currentScore++;
+        updateScoreText();
+    }
+
+    public void decrementScore() {
+        if (this.currentScore > 0)
+            this.currentScore--;
+        updateScoreText();
+    }
+
+    private void updateScoreText() {
+        this.score.setText("Score: " + this.currentScore);
     }
 
     public void updateRound(int round) {
