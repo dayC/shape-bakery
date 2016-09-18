@@ -112,13 +112,18 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         ActionListener pauseMemorize = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (index > 4) {
-                    timer.stop();
-                } else if (index > 0) {
+                System.out.println("INDEX > " + index);
+                if (index > 0) { //removes previous image background
                     getButton(order[index - 1].getReadable()).setBackground(null);
                 }
                 if (index < 4) {
                     getButton(order[index++].getReadable()).setBackground(Color.ORANGE);
+                }
+                else // if index >= 4
+                {
+                    timer.stop();
+                    memTimer.stop();
+                    updateInstructions("Click on the shapes in the correct order!");
                 }
 
             }
@@ -126,8 +131,9 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
         memTimer = new Timer(delay, pauseMemorize);
         memTimer.setRepeats(true);
-        memTimer.setInitialDelay(2 * delay);
+        //memTimer.setInitialDelay(2 * delay);
         memTimer.start();
+
     }
 
     public void actionPerformed(ActionEvent e) {
