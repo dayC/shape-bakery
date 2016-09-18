@@ -1,10 +1,11 @@
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class GameEngine extends JApplet {
     UI userInterface;
     Shape[] shapes = new Shape[]{Shape.CIRCLE, Shape.PENTAGON, Shape.RHOMBUS, Shape.TRAPEZOID};
-    ArrayList<String> shapes2 = new ArrayList<String>();
+    ArrayList<String> shapes2 = new ArrayList<String>(); //used to store player's sequence
 
     // GAME_DURATION is 20 by default
     private int gameDuration = 20;
@@ -71,7 +72,7 @@ public class GameEngine extends JApplet {
         int i = 0;
         while (i < correctOrder.length && i < this.shapes2.size()) {
             if (!correctOrder[i].getReadable().equals(this.shapes2.get(i))) {
-                userInterface.updateInstructions("Incorrect!");
+                userInterface.getButton(this.shapes2.get(i)).setBackground(Color.RED);
                 return false;
             }
             i++;
@@ -83,7 +84,7 @@ public class GameEngine extends JApplet {
         try {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
-                    resize(1024, 250);
+                    resize(800, 300);
                     createGUI();
                     userInterface.startGame(shapes);
                 }

@@ -78,7 +78,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     }
 
     private void highlightShapes() {
-        int delay = 6000;
+        int delay = 1000;
         ActionListener pauseDisplay = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 updateInstructions("Memorize the order the shapes are highlighted!");
@@ -96,7 +96,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
 
         // delay between showing memorization order of shapes
-        delay = 2000;
+        //delay = 2000;
 
         index = 0;
 
@@ -109,7 +109,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
                     getButton(order[index - 1].getReadable()).setBackground(null);
                 }
                 if (index < 4) {
-                    getButton(order[index++].getReadable()).setBackground(Color.RED);
+                    getButton(order[index++].getReadable()).setBackground(Color.ORANGE);
                 }
 
             }
@@ -122,25 +122,32 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     }
 
     public void actionPerformed(ActionEvent e) {
+        Sound.playSound();
         if (e.getSource() == options[0]) {
             engine.addShape(options[0].getName());
+            options[0].setBackground(Color.GREEN);
         } else if (e.getSource() == options[1]) {
             engine.addShape(options[1].getName());
+            options[1].setBackground(Color.GREEN);
         } else if (e.getSource() == options[2]) {
             engine.addShape(options[2].getName());
+            options[2].setBackground(Color.GREEN);
         } else if (e.getSource() == options[3]) {
             engine.addShape(options[3].getName());
+            options[3].setBackground(Color.GREEN);
         }
 
         if (!engine.checkforCorrectnessSoFar(this.order)) {
             decrementScore();
             engine.clearGuesses();
+
             nextRound(this.order);
         }
         else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.shapes2.size()) {
             this.order = shuffle(this.order);
             incrementScore();
             engine.clearGuesses();
+
             nextRound(this.order);
         }
     }
