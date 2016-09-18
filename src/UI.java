@@ -43,6 +43,11 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
     }
 
+    /**
+     * Initializes game.
+     * Generates a random sequence and shows the sequence for the user to input
+     * @param order An array of shapes that is already sorted in the correct memorization order.
+     */
     public void startGame(Shape[] order) {
         this.selectionPanel = new JPanel(new GridLayout(0,4));
         Shape[] shuffled = new Shape[order.length];
@@ -61,6 +66,10 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         highlightShapes();
     }
 
+    /**
+     * Creates new sequence for next round
+     * @param order Sequence used to UI generation
+     */
     private void nextRound(Shape[] order) {
         Shape[] shuffled = new Shape[order.length];
         this.order = order;

@@ -1,6 +1,4 @@
-import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.applet.Applet;
 import java.applet.AudioClip;
 

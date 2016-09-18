@@ -67,7 +67,11 @@ public class GameEngine extends JApplet {
         }
     }
 
-
+    /**
+     * Checks after each user input whether or not it is correct
+     * @param correctOrder the randomly generated sequence the user needs to have correct
+     * @return true if correct or false if incorrect
+     */
     public boolean checkforCorrectnessSoFar(Shape[] correctOrder) {
         int i = 0;
         while (i < correctOrder.length && i < this.shapes2.size()) {
@@ -104,6 +108,10 @@ public class GameEngine extends JApplet {
         this.shapes2.clear();
     }
 
+    /**
+     * Adds user input to ArrayList used to check with generated sequence
+     * @param shape String representation of user input
+     */
     public void addShape(String shape) {
 
         shapes2.add(shape);
