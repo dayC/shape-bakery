@@ -131,9 +131,15 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
         memTimer = new Timer(delay, pauseMemorize);
         memTimer.setRepeats(true);
-        //memTimer.setInitialDelay(2 * delay);
         memTimer.start();
+    }
 
+    //clears the image buttons from background colors
+    public void clearButtonBackground(){
+        for(JButton button : options)
+        {
+            button.setBackground(null);
+        }
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -155,14 +161,25 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         if (!engine.checkforCorrectnessSoFar(this.order)) {
             decrementScore();
             engine.clearGuesses();
-
+            clearButtonBackground();
             nextRound(this.order);
         }
         else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.shapes2.size()) {
-            this.order = shuffle(this.order);
-            incrementScore();
-            engine.clearGuesses();
+            int delay = 2000;
+            ActionListener pause = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    updateInstructions("You got it right! You get 1 point!");
+                    incrementScore();
+                }
+            };
 
+            Timer pauseTimer = new Timer(delay, pause);
+            pauseTimer.setRepeats(false);
+            pauseTimer.start();
+
+            this.order = shuffle(this.order);
+            engine.clearGuesses();
+            clearButtonBackground();
             nextRound(this.order);
         }
     }
