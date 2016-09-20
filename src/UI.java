@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class UI extends JPanel implements ActionListener, UIInterface {
     private GameEngine engine;
-    private JLabel score, instructions, title, round;
+    private JLabel score, instructions, title, level, correctnessMessage;
     JPanel selectionPanel;
     private JButton[] options;
     private Shape[] order;
@@ -20,29 +20,36 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     private int index;
     private Timer memTimer;
     private int currentScore;
+    private int currentLevel;
+    Tracker tracker = new Tracker();
 
-
-    boolean listenForClicks = false;
+    private boolean listenForClicks = false;
 
     public UI(GameEngine engine) {
         super(new BorderLayout());
         this.engine = engine;
-        options = new JButton[4];
-        images = new ImageIcon[4];
-        instructions = new JLabel("Welcome to Shape Factory!");
-        title = new JLabel("Shape Factory");
-        this.currentScore = 0;
-        score = new JLabel("Score: " + this.currentScore);
-        round = new JLabel("Round: 1");
 
-        JPanel titlePanel = new JPanel(new GridLayout(0,1));
-        titlePanel.add(title);
+        this.options = new JButton[4];
+        this.images = new ImageIcon[4];
+
+        this.currentScore = 0;
+        this.currentLevel = 1;
+        this.title = new JLabel("Shape Factory");
+        this.instructions = new JLabel("Welcome to Shape Factory!");
+        this.level = new JLabel("Level: " + this.currentLevel);
+        this.score = new JLabel("Score: " + this.currentScore);
+        this.correctnessMessage = new JLabel("");
+
+        JPanel titlePanel = new JPanel(new GridLayout(1,1));
+        titlePanel.add(this.title);
+        titlePanel.add(this.instructions);
         add(titlePanel, BorderLayout.NORTH);
 
-        JPanel scorePanel = new JPanel(new GridLayout(0,2));
-        scorePanel.add(score);
-        scorePanel.add(instructions);
-        add(scorePanel, BorderLayout.SOUTH);
+        JPanel lowerPanel = new JPanel(new GridLayout(2,1));
+        lowerPanel.add(this.score);
+        lowerPanel.add(this.correctnessMessage);
+        lowerPanel.add(this.level);
+        add(lowerPanel, BorderLayout.SOUTH);
 
     }
 
@@ -96,21 +103,12 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     }
 
     private void updatePanel() {
-        int delay = 1000;
-        ActionListener pauseDisplay = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                updateInstructions("Memorize the order the shapes are highlighted!");
+        updateInstructions("Memorize the order the shapes are highlighted!");
+        for (int i = 0; i < options.length; i++) {
+            selectionPanel.add(options[i]);
+        }
+        add(selectionPanel, BorderLayout.CENTER);
 
-                for (int i = 0; i < options.length; i++) {
-                    selectionPanel.add(options[i]);
-                }
-
-                add(selectionPanel, BorderLayout.CENTER);
-            }
-        };
-        Timer timer = new Timer(delay, pauseDisplay);
-        timer.setRepeats(false);
-        timer.start();
     }
 
     private void highlightShapes() {
@@ -136,7 +134,6 @@ public class UI extends JPanel implements ActionListener, UIInterface {
                 }
             }
         };
-
         memTimer = new Timer(delay, pauseMemorize);
         memTimer.setRepeats(true);
         memTimer.start();
@@ -169,7 +166,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
             if (!engine.checkforCorrectnessSoFar(this.order)) {
                 // Incorrect guess sequence
                 incorrectGuess();
-            } else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.shapes2.size()) {
+            } else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.userShapeSelections.size()) {
                 // Correct guess sequence
                 correctGuess();
             } else {
@@ -182,10 +179,15 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     private void incorrectGuess() {
         listenForClicks = false;
         Sound.playSound("audio/incorrect_beep.wav");
+        decrementScore();
+        updateCorrectnessMessage("Woops! Incorrect");
+
+        // Briefly flash red
         for (Shape s : order) {
             getButton(s.getReadable()).setBackground(Color.RED);
         }
-        int delay = 800;
+
+        int delay = 1500;
         index = 0;
         Timer timer = new Timer(delay, new ActionListener() {
             @Override
@@ -193,7 +195,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
                 for (Shape s : order) {
                     getButton(s.getReadable()).setBackground(null);
                 }
-                decrementScore();
+                updateCorrectnessMessage("");
                 engine.clearGuesses();
                 clearButtonBackground();
                 nextRound(order);
@@ -205,23 +207,22 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
     private void correctGuess() {
         listenForClicks = false;
-        int delay = 2000;
+        incrementScore();
+        updateCorrectnessMessage("Correct!");
+        int delay = 1000;
         Sound.playSound("audio/correct_beep.wav");
         ActionListener pause = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                updateInstructions("You got it right! You get 1 point!");
-                incrementScore();
+                updateCorrectnessMessage("");
+                order = shuffle(order);
+                engine.clearGuesses();
+                clearButtonBackground();
+                nextRound(order);
             }
         };
-
         Timer pauseTimer = new Timer(delay, pause);
         pauseTimer.setRepeats(false);
         pauseTimer.start();
-
-        this.order = shuffle(this.order);
-        engine.clearGuesses();
-        clearButtonBackground();
-        nextRound(this.order);
     }
 
     public Shape[] shuffle(Shape[] order) {
@@ -252,12 +253,14 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
     public void incrementScore() {
         this.currentScore++;
+        tracker.correct();
         updateScoreText();
     }
 
     public void decrementScore() {
         if (this.currentScore > 0)
             this.currentScore--;
+        tracker.incorrect();
         updateScoreText();
     }
 
@@ -265,11 +268,9 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         this.score.setText("Score: " + this.currentScore);
     }
 
-    public void updateRound(int round) {
-        this.round.setText("Round: " + round);
+    public void updateInstructions(String message) {
+        this.instructions.setText(message);
     }
 
-    public void updateInstructions(String message) {
-        this.instructions.setText("Message: " + message);
-    }
+    private void updateCorrectnessMessage(String message) { this.correctnessMessage.setText(message); }
 }

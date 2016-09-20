@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class GameEngine extends JApplet {
     UI userInterface;
     Shape[] shapes = new Shape[]{Shape.CIRCLE, Shape.PENTAGON, Shape.RHOMBUS, Shape.TRAPEZOID};
-    ArrayList<String> shapes2 = new ArrayList<String>(); //used to store player's sequence
+    ArrayList<String> userShapeSelections = new ArrayList<String>(); //used to store player's sequence
 
     // GAME_DURATION is 20 by default
     private int gameDuration = 20;
@@ -74,9 +74,9 @@ public class GameEngine extends JApplet {
      */
     public boolean checkforCorrectnessSoFar(Shape[] correctOrder) {
         int i = 0;
-        while (i < correctOrder.length && i < this.shapes2.size()) {
-            if (!correctOrder[i].getReadable().equals(this.shapes2.get(i))) {
-                userInterface.getButton(this.shapes2.get(i)).setBackground(Color.RED);
+        while (i < correctOrder.length && i < this.userShapeSelections.size()) {
+            if (!correctOrder[i].getReadable().equals(this.userShapeSelections.get(i))) {
+                userInterface.getButton(this.userShapeSelections.get(i)).setBackground(Color.RED);
                 return false;
             }
             i++;
@@ -105,7 +105,7 @@ public class GameEngine extends JApplet {
     }
 
     public void clearGuesses() {
-        this.shapes2.clear();
+        this.userShapeSelections.clear();
     }
 
     /**
@@ -114,8 +114,8 @@ public class GameEngine extends JApplet {
      */
     public void addShape(String shape) {
 
-        shapes2.add(shape);
-        for (String s : shapes2) {
+        userShapeSelections.add(shape);
+        for (String s : userShapeSelections) {
             System.out.print(s + ", ");
         }
         System.out.println();

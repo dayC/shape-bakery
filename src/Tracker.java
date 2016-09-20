@@ -50,30 +50,14 @@ public class Tracker {
      * Call to track when an answer is correct.
      */
     public void correct() {
-        try {
-            if (questionsAnswered() < nQuestions) {
-                nCorrect++;
-            } else {
-                throw new BoundsExceededException("Maximum number of answers tracked.");
-            }
-        } catch (BoundsExceededException e) {
-            System.out.println(e.getMessage());
-        }
+        nCorrect++;
     }
 
     /**
      * Call to track when an answer is incorrect.
      */
     public void incorrect() {
-        try {
-            if (questionsAnswered() < nQuestions) {
-                nIncorrect++;
-            } else {
-                throw new BoundsExceededException("Maximum number of answers tracked.");
-            }
-        } catch (BoundsExceededException e) {
-            System.out.println(e.getMessage());
-        }
+        nIncorrect++;
     }
 
     /**
