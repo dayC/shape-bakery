@@ -1,20 +1,21 @@
 /**
- * Enumerator which represents a shape.
+ * Enumerator which represents a shape.  Sets the path to each shape image in /images/
  */
 public enum Shape {
-    TRIANGLE ("triangle", "images/triangle.png"),
-    SQUARE ("square", "images/square.png"),
-    CIRCLE ("circle", "images/circle.png"),
-    RHOMBUS ("rhombus", "images/rhombus.jpg"),
-    TRAPEZOID ("trapezoid", "images/trapezoid.jpg"),
-    PENTAGON ("pentagon", "images/pentagon.png");
+    TRIANGLE ("triangle", "images/triangle.png"),   ///<A triangle shape.
+    SQUARE ("square", "images/square.png"),         ///<A square shape.
+    CIRCLE ("circle", "images/circle.png"),         ///<A circle shape.
+    RHOMBUS ("rhombus", "images/rhombus.jpg"),      ///<A rhombus shape.
+    TRAPEZOID ("trapezoid", "images/trapezoid.jpg"),///<A trapezoid shape.
+    PENTAGON ("pentagon", "images/pentagon.png");   ///<A pentagon shape.
 
     private final String readable; /**< The name of the shape in human-readable format. */
-    private final String image; /**< The name of the shape in human-readable format. */
+    private final String image; /**< The name of the image in human-readable format. */
 
     /**
      * Shape constructor.
-     * @param readable The name of the shape in human-readable format.
+     * @param readable = The name of the shape in human-readable format.
+     * @param image = The image to be attached to the shape.
      */
     Shape(String readable, String image) {
         this.readable = readable;
@@ -22,11 +23,17 @@ public enum Shape {
     }
 
     /**
+     * Gets the name of the shape in human-readable format.
      * @return The name of the shape in human-readable format.
      */
     public String getReadable() {
         return readable;
     }
+
+    /**
+     * Gets the image of the shape
+     * @return The image of the shape.
+     */
     public String getImage() {
         return image;
     }
