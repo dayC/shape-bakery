@@ -67,6 +67,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
             options[i].setName(shuffled[i].getReadable());
             options[i].addActionListener(this);
         }
+        updatePanel();
         highlightShapes();
     }
 
@@ -89,10 +90,11 @@ public class UI extends JPanel implements ActionListener, UIInterface {
             options[i].setOpaque(true);
             options[i].setName(shuffled[i].getReadable());
         }
+        updatePanel();
         highlightShapes();
     }
 
-    private void highlightShapes() {
+    private void updatePanel() {
         int delay = 1000;
         ActionListener pauseDisplay = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -108,13 +110,11 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         Timer timer = new Timer(delay, pauseDisplay);
         timer.setRepeats(false);
         timer.start();
+    }
 
-
-        // delay between showing memorization order of shapes
-        //delay = 2000;
-
+    private void highlightShapes() {
+        int delay = 1000;
         index = 0;
-
         ActionListener pauseMemorize = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -127,21 +127,18 @@ public class UI extends JPanel implements ActionListener, UIInterface {
                 }
                 else // if index >= 4
                 {
-                    timer.stop();
+//                    timer.stop();
                     memTimer.stop();
                     listenForClicks = true;
                     System.out.println("listenForClicks = " + listenForClicks);
                     updateInstructions("Click on the shapes in the correct order!");
                 }
-
             }
         };
 
         memTimer = new Timer(delay, pauseMemorize);
         memTimer.setRepeats(true);
         memTimer.start();
-
-
     }
 
     //clears the image buttons from background colors
