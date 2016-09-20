@@ -21,6 +21,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     private Timer memTimer;
     private int currentScore;
 
+
     boolean listenForClicks = false;
 
     public UI(GameEngine engine) {
@@ -55,7 +56,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         System.out.println("listenForClicks = " + listenForClicks);
         this.selectionPanel = new JPanel(new GridLayout(0,4));
         Shape[] shuffled = new Shape[order.length];
-        this.order = order;
+        this.order = shuffle(order);
         System.arraycopy(order, 0, shuffled, 0, shuffled.length);
 
         shuffled = shuffle(shuffled);
@@ -151,7 +152,6 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
     public void actionPerformed(ActionEvent e) {
         if (listenForClicks) {
-            System.out.println("Click");
             if (e.getSource() == options[0]) {
                 engine.addShape(options[0].getName());
                 options[0].setBackground(Color.GREEN);
@@ -168,35 +168,45 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
             if (!engine.checkforCorrectnessSoFar(this.order)) {
                 // Incorrect guess sequence
-                listenForClicks = false;
-                Sound.playSound("audio/incorrect_beep.wav");
-                decrementScore();
-                engine.clearGuesses();
-                clearButtonBackground();
-                nextRound(this.order);
+                incorrectGuess();
             } else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.shapes2.size()) {
                 // Correct guess sequence
-                listenForClicks = false;
-                int delay = 2000;
-                Sound.playSound("audio/correct_beep.wav");
-                ActionListener pause = new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        updateInstructions("You got it right! You get 1 point!");
-                        incrementScore();
-                    }
-                };
-
-                Timer pauseTimer = new Timer(delay, pause);
-                pauseTimer.setRepeats(false);
-                pauseTimer.start();
-
-                this.order = shuffle(this.order);
-                engine.clearGuesses();
-                clearButtonBackground();
-                nextRound(this.order);
-            } else
+                correctGuess();
+            } else {
+                // Play generic click sound
                 Sound.playSound("audio/click.wav");
+            }
         }
+    }
+
+    private void incorrectGuess() {
+        listenForClicks = false;
+        Sound.playSound("audio/incorrect_beep.wav");
+        decrementScore();
+        engine.clearGuesses();
+        clearButtonBackground();
+        nextRound(this.order);
+    }
+
+    private void correctGuess() {
+        listenForClicks = false;
+        int delay = 2000;
+        Sound.playSound("audio/correct_beep.wav");
+        ActionListener pause = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                updateInstructions("You got it right! You get 1 point!");
+                incrementScore();
+            }
+        };
+
+        Timer pauseTimer = new Timer(delay, pause);
+        pauseTimer.setRepeats(false);
+        pauseTimer.start();
+
+        this.order = shuffle(this.order);
+        engine.clearGuesses();
+        clearButtonBackground();
+        nextRound(this.order);
     }
 
     public Shape[] shuffle(Shape[] order) {
