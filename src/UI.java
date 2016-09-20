@@ -182,10 +182,25 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     private void incorrectGuess() {
         listenForClicks = false;
         Sound.playSound("audio/incorrect_beep.wav");
-        decrementScore();
-        engine.clearGuesses();
-        clearButtonBackground();
-        nextRound(this.order);
+        for (Shape s : order) {
+            getButton(s.getReadable()).setBackground(Color.RED);
+        }
+        int delay = 800;
+        index = 0;
+        Timer timer = new Timer(delay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (Shape s : order) {
+                    getButton(s.getReadable()).setBackground(null);
+                }
+                decrementScore();
+                engine.clearGuesses();
+                clearButtonBackground();
+                nextRound(order);
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
     }
 
     private void correctGuess() {
