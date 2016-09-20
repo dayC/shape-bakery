@@ -143,7 +143,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     }
 
     public void actionPerformed(ActionEvent e) {
-        Sound.playSound();
+        System.out.println("Click");
         if (e.getSource() == options[0]) {
             engine.addShape(options[0].getName());
             options[0].setBackground(Color.GREEN);
@@ -159,6 +159,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         }
 
         if (!engine.checkforCorrectnessSoFar(this.order)) {
+            Sound.playSound("audio/incorrect_beep.wav");
             decrementScore();
             engine.clearGuesses();
             clearButtonBackground();
@@ -166,6 +167,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         }
         else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.shapes2.size()) {
             int delay = 2000;
+            Sound.playSound("audio/correct_beep.wav");
             ActionListener pause = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     updateInstructions("You got it right! You get 1 point!");
@@ -182,6 +184,8 @@ public class UI extends JPanel implements ActionListener, UIInterface {
             clearButtonBackground();
             nextRound(this.order);
         }
+        else
+            Sound.playSound("audio/click.wav");
     }
 
     public Shape[] shuffle(Shape[] order) {
