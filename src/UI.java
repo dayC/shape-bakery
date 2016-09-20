@@ -43,6 +43,11 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
     }
 
+    /**
+     * Initializes game.
+     * Generates a random sequence and shows the sequence for the user to input
+     * @param order An array of shapes that is already sorted in the correct memorization order.
+     */
     public void startGame(Shape[] order) {
         this.selectionPanel = new JPanel(new GridLayout(0,4));
         Shape[] shuffled = new Shape[order.length];
@@ -61,6 +66,10 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         highlightShapes();
     }
 
+    /**
+     * Creates new sequence for next round
+     * @param order Sequence used to UI generation
+     */
     private void nextRound(Shape[] order) {
         Shape[] shuffled = new Shape[order.length];
         this.order = order;
@@ -78,7 +87,7 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     }
 
     private void highlightShapes() {
-        int delay = 6000;
+        int delay = 1000;
         ActionListener pauseDisplay = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 updateInstructions("Memorize the order the shapes are highlighted!");
@@ -96,20 +105,25 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
 
         // delay between showing memorization order of shapes
-        delay = 2000;
+        //delay = 2000;
 
         index = 0;
 
         ActionListener pauseMemorize = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (index > 4) {
-                    timer.stop();
-                } else if (index > 0) {
+                System.out.println("INDEX > " + index);
+                if (index > 0) { //removes previous image background
                     getButton(order[index - 1].getReadable()).setBackground(null);
                 }
                 if (index < 4) {
-                    getButton(order[index++].getReadable()).setBackground(Color.RED);
+                    getButton(order[index++].getReadable()).setBackground(Color.ORANGE);
+                }
+                else // if index >= 4
+                {
+                    timer.stop();
+                    memTimer.stop();
+                    updateInstructions("Click on the shapes in the correct order!");
                 }
 
             }
@@ -117,30 +131,55 @@ public class UI extends JPanel implements ActionListener, UIInterface {
 
         memTimer = new Timer(delay, pauseMemorize);
         memTimer.setRepeats(true);
-        memTimer.setInitialDelay(2 * delay);
         memTimer.start();
     }
 
+    //clears the image buttons from background colors
+    public void clearButtonBackground(){
+        for(JButton button : options)
+        {
+            button.setBackground(null);
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
+        Sound.playSound();
         if (e.getSource() == options[0]) {
             engine.addShape(options[0].getName());
+            options[0].setBackground(Color.GREEN);
         } else if (e.getSource() == options[1]) {
             engine.addShape(options[1].getName());
+            options[1].setBackground(Color.GREEN);
         } else if (e.getSource() == options[2]) {
             engine.addShape(options[2].getName());
+            options[2].setBackground(Color.GREEN);
         } else if (e.getSource() == options[3]) {
             engine.addShape(options[3].getName());
+            options[3].setBackground(Color.GREEN);
         }
 
         if (!engine.checkforCorrectnessSoFar(this.order)) {
             decrementScore();
             engine.clearGuesses();
+            clearButtonBackground();
             nextRound(this.order);
         }
         else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.shapes2.size()) {
+            int delay = 2000;
+            ActionListener pause = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    updateInstructions("You got it right! You get 1 point!");
+                    incrementScore();
+                }
+            };
+
+            Timer pauseTimer = new Timer(delay, pause);
+            pauseTimer.setRepeats(false);
+            pauseTimer.start();
+
             this.order = shuffle(this.order);
-            incrementScore();
             engine.clearGuesses();
+            clearButtonBackground();
             nextRound(this.order);
         }
     }
