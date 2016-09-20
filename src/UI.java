@@ -21,6 +21,8 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     private Timer memTimer;
     private int currentScore;
 
+    boolean listenForClicks = false;
+
     public UI(GameEngine engine) {
         super(new BorderLayout());
         this.engine = engine;
@@ -49,6 +51,8 @@ public class UI extends JPanel implements ActionListener, UIInterface {
      * @param order An array of shapes that is already sorted in the correct memorization order.
      */
     public void startGame(Shape[] order) {
+        listenForClicks = false;
+        System.out.println("listenForClicks = " + listenForClicks);
         this.selectionPanel = new JPanel(new GridLayout(0,4));
         Shape[] shuffled = new Shape[order.length];
         this.order = order;
@@ -71,6 +75,8 @@ public class UI extends JPanel implements ActionListener, UIInterface {
      * @param order Sequence used to UI generation
      */
     private void nextRound(Shape[] order) {
+        listenForClicks = false;
+        System.out.println("listenForClicks = " + listenForClicks);
         Shape[] shuffled = new Shape[order.length];
         this.order = order;
         System.arraycopy(order, 0, shuffled, 0, shuffled.length);
@@ -123,6 +129,8 @@ public class UI extends JPanel implements ActionListener, UIInterface {
                 {
                     timer.stop();
                     memTimer.stop();
+                    listenForClicks = true;
+                    System.out.println("listenForClicks = " + listenForClicks);
                     updateInstructions("Click on the shapes in the correct order!");
                 }
 
@@ -132,6 +140,8 @@ public class UI extends JPanel implements ActionListener, UIInterface {
         memTimer = new Timer(delay, pauseMemorize);
         memTimer.setRepeats(true);
         memTimer.start();
+
+
     }
 
     //clears the image buttons from background colors
@@ -143,49 +153,53 @@ public class UI extends JPanel implements ActionListener, UIInterface {
     }
 
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Click");
-        if (e.getSource() == options[0]) {
-            engine.addShape(options[0].getName());
-            options[0].setBackground(Color.GREEN);
-        } else if (e.getSource() == options[1]) {
-            engine.addShape(options[1].getName());
-            options[1].setBackground(Color.GREEN);
-        } else if (e.getSource() == options[2]) {
-            engine.addShape(options[2].getName());
-            options[2].setBackground(Color.GREEN);
-        } else if (e.getSource() == options[3]) {
-            engine.addShape(options[3].getName());
-            options[3].setBackground(Color.GREEN);
-        }
+        if (listenForClicks) {
+            System.out.println("Click");
+            if (e.getSource() == options[0]) {
+                engine.addShape(options[0].getName());
+                options[0].setBackground(Color.GREEN);
+            } else if (e.getSource() == options[1]) {
+                engine.addShape(options[1].getName());
+                options[1].setBackground(Color.GREEN);
+            } else if (e.getSource() == options[2]) {
+                engine.addShape(options[2].getName());
+                options[2].setBackground(Color.GREEN);
+            } else if (e.getSource() == options[3]) {
+                engine.addShape(options[3].getName());
+                options[3].setBackground(Color.GREEN);
+            }
 
-        if (!engine.checkforCorrectnessSoFar(this.order)) {
-            Sound.playSound("audio/incorrect_beep.wav");
-            decrementScore();
-            engine.clearGuesses();
-            clearButtonBackground();
-            nextRound(this.order);
-        }
-        else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.shapes2.size()) {
-            int delay = 2000;
-            Sound.playSound("audio/correct_beep.wav");
-            ActionListener pause = new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    updateInstructions("You got it right! You get 1 point!");
-                    incrementScore();
-                }
-            };
+            if (!engine.checkforCorrectnessSoFar(this.order)) {
+                // Incorrect guess sequence
+                listenForClicks = false;
+                Sound.playSound("audio/incorrect_beep.wav");
+                decrementScore();
+                engine.clearGuesses();
+                clearButtonBackground();
+                nextRound(this.order);
+            } else if (engine.checkforCorrectnessSoFar(this.order) && this.order.length == engine.shapes2.size()) {
+                // Correct guess sequence
+                listenForClicks = false;
+                int delay = 2000;
+                Sound.playSound("audio/correct_beep.wav");
+                ActionListener pause = new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        updateInstructions("You got it right! You get 1 point!");
+                        incrementScore();
+                    }
+                };
 
-            Timer pauseTimer = new Timer(delay, pause);
-            pauseTimer.setRepeats(false);
-            pauseTimer.start();
+                Timer pauseTimer = new Timer(delay, pause);
+                pauseTimer.setRepeats(false);
+                pauseTimer.start();
 
-            this.order = shuffle(this.order);
-            engine.clearGuesses();
-            clearButtonBackground();
-            nextRound(this.order);
+                this.order = shuffle(this.order);
+                engine.clearGuesses();
+                clearButtonBackground();
+                nextRound(this.order);
+            } else
+                Sound.playSound("audio/click.wav");
         }
-        else
-            Sound.playSound("audio/click.wav");
     }
 
     public Shape[] shuffle(Shape[] order) {
