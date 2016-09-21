@@ -29,13 +29,14 @@ Children are expected to have the following skills before using the program
 
 
 ## Design & Implementation
-The program will be implemented as a Java Applet. Knowledges required include:
-● Java
-● Java Applets
-● Swing UI Library
-● JavaScript Object Notation (JSON)
-● Git/GitHub
-● Doxygen
+The program will be implemented as a Java Applet.  
+Knowledges required include:  
+● Java  
+● Java Applets  
+● Swing UI Library  
+● JavaScript Object Notation (JSON)  
+● Git/GitHub  
+● Doxygen  
 Note: Bolded items indicate subjects that need to be learned by every member of the team. An
 item that is not bolded indicates at least one member of the team has prior knowledge. This list
 may be expanded during implementation.
@@ -54,9 +55,9 @@ encapsulates question and answer data and knows correct answers.
 
 
 ### User Interface (UI)
-● Provides a visual front end to the game engine.
+● Provides a visual front end to the game engine.  
 ● Receives user mouse inputs corresponding to possible options in a particular stage in
-the game, and passes that information along to the game engine for actual processing.
+the game, and passes that information along to the game engine for actual processing.  
 ● Displays user interface elements and other necessary information as requested by the
 game engine. The user interface doesn’t know anything about the state of the game, it
 simply displays what it is told to display.
@@ -64,17 +65,17 @@ simply displays what it is told to display.
 
 ### Game Engine (GE)
 ● Acts as the central module, facilitating communication between the other modules.     
-● Controls the flow of the program throughout all stages.
-● Initializes data for the initial game, and all subsequent games.
+● Controls the flow of the program throughout all stages.                                      
+● Initializes data for the initial game, and all subsequent games.    
 ● Receives user input from the user interface and maps it to the appropriate function. This
 can involve moving information down further into the QA module if it concerns question
-and answer data.
+and answer data.   
 ● Receives validation responses from the QA module, and prepares for the next stage in
 the game, passing along needed data to the user interface for updating.
-Questions/Answers (QA)
-● Encapsulates question and answer data.
+Questions/Answers (QA)   
+● Encapsulates question and answer data.  
 ● Responsible for validating responses received for questions. Only the QA module knows
-what the correct answers are to the current question.
+what the correct answers are to the current question.  
 ● Receives a request to validate the correctness of a question from the game engine, and
 sends back the result of the validation. It is only concerned with validating and
 processing question and answer data, anything else that needs to change in the game is
