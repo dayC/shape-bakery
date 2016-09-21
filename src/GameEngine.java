@@ -76,7 +76,7 @@ public class GameEngine extends JApplet {
         int i = 0;
         while (i < correctOrder.length && i < this.userShapeSelections.size()) {
             if (!correctOrder[i].getReadable().equals(this.userShapeSelections.get(i))) {
-                userInterface.getButton(this.userShapeSelections.get(i)).setBackground(Color.RED);
+                ((GameUI)userInterface).getButton(this.userShapeSelections.get(i)).setBackground(Color.RED);
                 return false;
             }
             i++;
@@ -89,8 +89,8 @@ public class GameEngine extends JApplet {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
                     resize(800, 300);
-                    createGUI();
-                    userInterface.startGame(shapes);
+                    createMainMenuGUI();
+//                    userInterface.startGame(shapes);
                 }
             });
         } catch (Exception e) {
@@ -98,10 +98,16 @@ public class GameEngine extends JApplet {
         }
     }
 
-    private void createGUI() {
-        userInterface = new UI(this);
-        userInterface.setOpaque(true);
-        setContentPane(userInterface);
+    private void createMainMenuGUI() {
+        userInterface = new MainMenuUI(this);
+        setContentPane((MainMenuUI)userInterface);
+    }
+    
+    public void createGameGUI() {
+        userInterface = new GameUI(this);
+        ((GameUI)userInterface).setOpaque(true);
+        setContentPane((GameUI)userInterface);
+        ((GameUI) userInterface).constructUI(shapes);
     }
 
     public void clearGuesses() {
