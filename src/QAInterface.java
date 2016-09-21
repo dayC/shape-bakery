@@ -1,5 +1,6 @@
 /**
  * Defines the interface for a question/answer class of the form memorize and match a sequence.
+ * \todo Implement this interface for modularity, currently unused.
  */
 public interface QAInterface<T> {
     /**

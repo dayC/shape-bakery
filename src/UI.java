@@ -8,5 +8,4 @@ public interface UI {
      * Adds panels and buttons from instance variables to current UI
      */
     void constructUI();
-
 }

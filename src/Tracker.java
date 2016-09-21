@@ -1,5 +1,6 @@
 /**
  * Tracks gameplay statistics.
+ * \todo Some of these methods are unused, use Tracker class to handle high scores and saved games
  */
 public class Tracker {
 
@@ -8,7 +9,6 @@ public class Tracker {
     private int nIncorrect; /**< The number of questions answered incorrectly. */
 
     /**
-     * TODO: Use Tracker class to handle high scores and saved games
      * Tracker constructor.
      */
     public Tracker() {

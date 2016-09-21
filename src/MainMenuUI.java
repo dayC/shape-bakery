@@ -14,6 +14,10 @@ public class MainMenuUI extends JPanel implements UI {
     private JLabel title;
 
 
+    /**
+     * Constructor for Main Menu
+     * @param engine
+     */
     public MainMenuUI(GameEngine engine) {
         super(new BorderLayout());
         this.engine = engine;
@@ -21,6 +25,9 @@ public class MainMenuUI extends JPanel implements UI {
         constructUI();
     }
 
+    /**
+     * Construct the UI
+     */
     public void constructUI() {
         this.title = new JLabel("Shape Factory");
         playButton = new JButton();
