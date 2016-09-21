@@ -121,10 +121,6 @@ public class GameEngine extends JApplet {
     public void addShape(String shape) {
 
         userShapeSelections.add(shape);
-        for (String s : userShapeSelections) {
-            System.out.print(s + ", ");
-        }
-        System.out.println();
     }
     
 }

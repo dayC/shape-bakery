@@ -64,7 +64,6 @@ public class GameUI extends JPanel implements ActionListener, UI {
      */
     public void constructUI(Shape[] order) {
         listenForClicks = false;
-        System.out.println("listenForClicks = " + listenForClicks);
         this.selectionPanel = new JPanel(new GridLayout(0,4));
         Shape[] shuffled = new Shape[order.length];
         this.order = shuffle(order);
@@ -89,7 +88,6 @@ public class GameUI extends JPanel implements ActionListener, UI {
      */
     private void nextRound(Shape[] order) {
         listenForClicks = false;
-        System.out.println("listenForClicks = " + listenForClicks);
         Shape[] shuffled = new Shape[order.length];
         this.order = order;
         System.arraycopy(order, 0, shuffled, 0, shuffled.length);
@@ -130,9 +128,9 @@ public class GameUI extends JPanel implements ActionListener, UI {
         ActionListener pauseMemorize = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("INDEX > " + index);
                 if (index > 0) { //removes previous image background
                     getButton(order[index - 1].getReadable()).setBackground(null);
+
                 }
                 if (index < 4) {
                     getButton(order[index++].getReadable()).setBackground(Color.ORANGE);
@@ -141,7 +139,6 @@ public class GameUI extends JPanel implements ActionListener, UI {
                 {
                     memTimer.stop();
                     listenForClicks = true;
-                    System.out.println("listenForClicks = " + listenForClicks);
 
                 }
             }

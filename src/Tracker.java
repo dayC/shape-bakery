@@ -8,6 +8,7 @@ public class Tracker {
     private int nIncorrect; /**< The number of questions answered incorrectly. */
 
     /**
+     * TODO: Use Tracker class to handle high scores and saved games
      * Tracker constructor.
      */
     public Tracker() {

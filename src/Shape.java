@@ -5,8 +5,8 @@ public enum Shape {
     TRIANGLE ("triangle", "images/triangle.png"),
     SQUARE ("square", "images/square.png"),
     CIRCLE ("circle", "images/circle.png"),
-    RHOMBUS ("rhombus", "images/rhombus.jpg"),
-    TRAPEZOID ("trapezoid", "images/trapezoid.jpg"),
+    RHOMBUS ("rhombus", "images/rhombus.png"),
+    TRAPEZOID ("trapezoid", "images/trapezoid.png"),
     PENTAGON ("pentagon", "images/pentagon.png");
 
     private final String readable; /**< The name of the shape in human-readable format. */
